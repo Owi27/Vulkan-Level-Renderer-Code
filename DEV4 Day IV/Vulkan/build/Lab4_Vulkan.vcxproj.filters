@@ -9,13 +9,9 @@
     <ClInclude Include="C:\Users\owens\Documents\Project &amp; Portfolio 4\DEV4 Day IV\Vulkan\renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FSLogo.h" />
-    <ClInclude Include="h2bParser.h" />
-    <ClInclude Include="Model.h" />
-    <ClInclude Include="textParser.h" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\owens\Documents\Project &amp; Portfolio 4\DEV4 Day IV\Vulkan\CMakeLists.txt" />
+    <CustomBuild Include="..\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -24,9 +20,5 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{7CE54C35-08D6-3A86-8D61-D0B452E3BED0}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="VertexShader.hlsl" />
-    <FxCompile Include="PixelShader.hlsl" />
   </ItemGroup>
 </Project>

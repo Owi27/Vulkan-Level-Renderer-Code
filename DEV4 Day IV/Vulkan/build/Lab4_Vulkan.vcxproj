@@ -256,7 +256,7 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\owens\Documents\Project &amp; Portfolio 4\DEV4 Day IV\Vulkan\CMakeLists.txt">
+    <CustomBuild Include="..\CMakeLists.txt">
       <UseUtf8Encoding>Always</UseUtf8Encoding>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/owens/Documents/Project ^&amp; Portfolio 4/DEV4 Day IV/Vulkan/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
@@ -315,10 +315,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   <ItemGroup>
     <ClCompile Include="C:\Users\owens\Documents\Project &amp; Portfolio 4\DEV4 Day IV\Vulkan\main.cpp" />
     <ClInclude Include="C:\Users\owens\Documents\Project &amp; Portfolio 4\DEV4 Day IV\Vulkan\renderer.h" />
-    <ClInclude Include="FSLogo.h" />
-    <ClInclude Include="h2bParser.h" />
-    <ClInclude Include="Model.h" />
-    <ClInclude Include="textParser.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:\Users\owens\Documents\Project &amp; Portfolio 4\DEV4 Day IV\Vulkan\build\ZERO_CHECK.vcxproj">
@@ -327,18 +323,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="PixelShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">6.0</ShaderModel>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="VertexShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
