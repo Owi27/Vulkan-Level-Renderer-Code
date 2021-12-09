@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "49a9b6fb-72bd-3e42-887d-71c9662d65c6": {
+      "ProjectGuid": "49a9b6fb-72bd-3e42-887d-71c9662d65c6",
+      "DisplayName": "Lab3_Vulkan",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

@@ -1,0 +1,22 @@
+Tired of editing Vulkan/OpenGL shaders in string form?
+Me too! Make an .hlsl or .glsl file and use whatever text editor you like instead.
+(Bonus: VS will do syntax highlighting on .hlsl files)
+
+Once you move your shaders to their own files you can use this to convert them to strings:
+
+// Load a shader file as a string of characters.
+std::string ShaderAsString(const char* shaderFilePath) {
+	std::string output;
+	unsigned int stringLength = 0;
+	GW::SYSTEM::GFile file; file.Create();
+	file.GetFileSize(shaderFilePath, stringLength);
+	if (stringLength && +file.OpenBinaryRead(shaderFilePath)) {
+		output.resize(stringLength);
+		file.Read(&output[0], stringLength);
+	}
+	return output;
+}
+
+Then just nab the string and send it to the relevant shader compiler in your code.
+Unless you are using something like "shaderEd" You will still need to check them for compile errors at run-time.
+However, this should make editing them between compiles way less annoying.

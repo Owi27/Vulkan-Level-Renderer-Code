@@ -1,0 +1,10 @@
+^C:\USERS\OWENS\DOCUMENTS\PROJECT & PORTFOLIO 4\DEV4 DAY I\VULKAN\BUILD\CMAKEFILES\3AF3E790C891605D4BFBE5F804BC971A\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/owens/Documents/Project & Portfolio 4/DEV4 Day I/Vulkan" "-BC:/Users/owens/Documents/Project & Portfolio 4/DEV4 Day I/Vulkan/build" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Users/owens/Documents/Project & Portfolio 4/DEV4 Day I/Vulkan/build/Lab1_Vulkan.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

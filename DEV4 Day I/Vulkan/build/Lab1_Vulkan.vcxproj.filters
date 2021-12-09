@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\owens\Documents\Project &amp; Portfolio 4\DEV4 Day I\Vulkan\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\owens\Documents\Project &amp; Portfolio 4\DEV4 Day I\Vulkan\renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\owens\Documents\Project &amp; Portfolio 4\DEV4 Day I\Vulkan\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{4C3A12D2-891F-3EFF-9111-EA3BB00E2D53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{313E09AF-4979-3141-9762-AC7D9F378043}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
