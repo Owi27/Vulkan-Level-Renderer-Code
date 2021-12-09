@@ -2,10 +2,10 @@
 #include "../h2bParser.h"
 #include "../FSLogo.h"
 #include "../../Gateware/Gateware.h"
+#include <vulkan/vulkan.h>
+#include <vulkan/vulkan_xlib.h>
 using namespace std;
 using namespace H2B;
-
-vector<char*> h2bVec;
 
 #define MAX_SUBMESH_PER_DRAW 1024
 struct SHADER_MODEL_DATA
@@ -24,6 +24,8 @@ public:
 	int modelID;
 	Parser parse;
 	SHADER_MODEL_DATA smd;
+	VkBuffer buffer2 = nullptr;
+	VkDeviceMemory deviceMemory2 = nullptr;
 };
 
 string FileEndFix(string strings)
@@ -65,18 +67,22 @@ string FileEndFix(string strings)
 	}
 }
 
-vector<string> Text2Model(const char* filename, int _amountOfModels)
+vector<Model> Text2Model(const char* filename, int _amountOfModels)
 {
-	vector<string> lines;
+	string filepath = ".. / DEV4Git /";
+	vector<Model> models;
+	Model add = {};
 
 	ifstream file;
 
 	file.open(filename, ios::in);
 
-	if (file.is_open())
+	string tempo;
+	char temp[255];
+
+
+	if (!file.eof())
 	{
-		string tempo;
-		char temp[255];
 		file.getline(temp, 255);
 		tempo = temp;
 
@@ -88,7 +94,10 @@ vector<string> Text2Model(const char* filename, int _amountOfModels)
 			file.getline(temp, 255, '.');
 			tempo = temp;
 			tempo = FileEndFix(tempo);
-			lines.push_back(tempo);
+			filepath.append(tempo);
+			filepath.append(".h2b");
+			add.parse.Parse(filepath.c_str());
+			//lines.push_back(tempo);
 
 			for (size_t j = 0; j < 4; j++)
 			{
@@ -97,13 +106,19 @@ vector<string> Text2Model(const char* filename, int _amountOfModels)
 
 				file.getline(temp, 255, ')');
 				tempo = temp;
-				lines.push_back(tempo);
+				char* row = strtok(temp, ",");
+				//lines.push_back(tempo);
 			}
-
+			//add.smd.matricies[i].
 			file.getline(temp, 255, '\n');
 			tempo = temp;
+
+			add.meshID = i;
+			add.modelID = i;
+
+			
 		}
 	}
 
-	return lines;
+	//return lines;
 }
