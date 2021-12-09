@@ -1,7 +1,11 @@
 #pragma once
 #include "../h2bParser.h"
+#include "../FSLogo.h"
+#include "../../Gateware/Gateware.h"
 using namespace std;
 using namespace H2B;
+
+vector<char*> h2bVec;
 
 #define MAX_SUBMESH_PER_DRAW 1024
 struct SHADER_MODEL_DATA
@@ -13,7 +17,6 @@ struct SHADER_MODEL_DATA
 	OBJ_ATTRIBUTES materials[MAX_SUBMESH_PER_DRAW];
 };
 
-
 class Model
 {
 public:
@@ -23,6 +26,44 @@ public:
 	SHADER_MODEL_DATA smd;
 };
 
+string FileEndFix(string strings)
+{
+	string temp;
+
+	// Cylinder End Delete
+	if (strings.at(strings.size() - 1) == 'r' && strings.at(strings.size() - 2) == 'e')
+	{
+		for (size_t i = 0; i < 9; i++)
+		{
+			strings.pop_back();
+		}
+
+		temp = strings;
+		return temp;
+	}
+	// Plane End Delete
+	else if (strings.at(strings.size() - 1) == 'e' && strings.at(strings.size() - 2) == 'n')
+	{
+		for (size_t i = 0; i < 6; i++)
+		{
+			strings.pop_back();
+		}
+
+		temp = strings;
+		return temp;
+	}
+	// Cube End Check
+	else if (strings.at(strings.size() - 1) == 'e' && strings.at(strings.size() - 2) == 'b')
+	{
+		for (size_t i = 0; i < 5; i++)
+		{
+			strings.pop_back();
+		}
+
+		temp = strings;
+		return temp;
+	}
+}
 
 vector<string> Text2Model(const char* filename, int _amountOfModels)
 {
@@ -46,6 +87,7 @@ vector<string> Text2Model(const char* filename, int _amountOfModels)
 
 			file.getline(temp, 255, '.');
 			tempo = temp;
+			tempo = FileEndFix(tempo);
 			lines.push_back(tempo);
 
 			for (size_t j = 0; j < 4; j++)
@@ -61,10 +103,7 @@ vector<string> Text2Model(const char* filename, int _amountOfModels)
 			file.getline(temp, 255, '\n');
 			tempo = temp;
 		}
-
 	}
 
 	return lines;
 }
-
-

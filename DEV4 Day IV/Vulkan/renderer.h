@@ -1,6 +1,6 @@
 // minimalistic code to draw a single triangle, this is not part of the API.
 // TODO: Part 1b
-#include "FSLogo.h"
+#include "../Vulkan/FSLogo.h"
 #include "h2bParser.h"
 #include "build/Model.h"
 #include "shaderc/shaderc.h" // needed for compiling shaders at runtime
