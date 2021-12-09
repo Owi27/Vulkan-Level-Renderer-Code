@@ -1,5 +1,1 @@
 ﻿  Checking Build System
-  CMake is re-running because C:/Users/owens/Documents/Project & Portfolio 4/DEV4 Day IV/Vulkan/build/CMakeFiles/generate.stamp dependency file is missing.
-CUSTOMBUILD : CMake error : The source directory "C:/Users/owens/Documents/Project & Portfolio 4/DEV4 Day IV/Vulkan" does not appear to contain CMakeLists.txt.
-  Specify --help for usage, or press the help button on the CMake GUI.
-C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(242,5): error MSB8066: Custom build for 'C:\Users\owens\Documents\Project & Portfolio 4\DEV4 Day IV\Vulkan\build\CMakeFiles\055a932354710683d7ea3b9acb6c0650\generate.stamp.rule' exited with code 1.

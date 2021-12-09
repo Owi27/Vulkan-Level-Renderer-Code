@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/owens/Documents/Project & Portfolio 4/DEV4 Day IV/Vulkan
+# Install script for directory: C:/Users/owens/Documents/GitHub/DEV4Git/DEV4 Day IV/Vulkan
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/owens/Documents/Project & Portfolio 4/DEV4 Day IV/Vulkan/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/owens/Documents/GitHub/DEV4Git/DEV4 Day IV/Vulkan/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -1,9 +1,9 @@
 #pragma once
-#include "../h2bParser.h"
-#include "../FSLogo.h"
+#include "h2bParser.h"
+#include "FSLogo.h"
 #include "../../Gateware/Gateware.h"
 #include <vulkan/vulkan.h>
-#include <vulkan/vulkan_xlib.h>
+//#include <vulkan/vulkan_xlib.h>
 using namespace std;
 using namespace H2B;
 
@@ -120,5 +120,5 @@ vector<Model> Text2Model(const char* filename, int _amountOfModels)
 		}
 	}
 
-	//return lines;
+	return models;
 }
