@@ -79,9 +79,6 @@ C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.
 C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(4768): message : see declaration of 'GW::I::GEventGeneratorImplementation::Push'
 C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\h2bParser.h(81,22): warning C4018: '<': signed/unsigned mismatch
 C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\h2bParser.h(96,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\Model.h(116,18): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\Model.h(117,19): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\Model.h(109,17): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
 C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\renderer.h(89,48): warning C4305: 'initializing': truncation from 'double' to 'float'
 C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\renderer.h(153,21): warning C4018: '<': signed/unsigned mismatch
 C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(16886,4): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data

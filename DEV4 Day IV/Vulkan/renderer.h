@@ -20,7 +20,7 @@ std::string ShaderAsString(const char* shaderFilePath) {
 	return output;
 }
 
-vector<Model> models;
+vector<Model> models = Text2Model("../DEV4Git/GameLevel.txt");
 
 // Simple Vertex Shader
 std::string verShader = ShaderAsString("VertexShader.hlsl");

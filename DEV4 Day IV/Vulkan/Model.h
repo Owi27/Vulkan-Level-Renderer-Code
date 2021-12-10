@@ -67,9 +67,8 @@ string FileEndFix(string strings)
 	}
 }
 
-vector<Model> Text2Model(const char* filename, int _amountOfModels)
+vector<Model> Text2Model(const char* filename)
 {
-	string filepath = ".. / DEV4Git /";
 	vector<Model> models;
 	Model add = {};
 
@@ -80,45 +79,50 @@ vector<Model> Text2Model(const char* filename, int _amountOfModels)
 	string tempo;
 	char temp[255];
 
+	file.getline(temp, 255);
+	tempo = temp;
 
-	if (!file.eof())
+	int idx = 0;
+	while (!file.eof())
 	{
-		file.getline(temp, 255);
+		file.getline(temp, 255, '\n');
 		tempo = temp;
 
-		for (size_t i = 0; i < _amountOfModels; i++)
+		file.getline(temp, 255, '.');
+		tempo = temp;
+		if (tempo.size() != 0)
 		{
-			file.getline(temp, 255, '\n');
-			tempo = temp;
-
-			file.getline(temp, 255, '.');
-			tempo = temp;
 			tempo = FileEndFix(tempo);
-			filepath.append(tempo);
-			filepath.append(".h2b");
-			add.parse.Parse(filepath.c_str());
-			//lines.push_back(tempo);
+		}
+		string filepath = "DEV4Git/";
+		filepath.append(tempo);
+		filepath.append(".h2b");
+		add.parse.Parse(filepath.c_str());
+		bool work = add.parse.Parse(filepath.c_str());
+		
+		//lines.push_back(tempo);
 
-			for (size_t j = 0; j < 4; j++)
-			{
-				file.getline(temp, 255, '(');
-				tempo = temp;
-
-				file.getline(temp, 255, ')');
-				tempo = temp;
-				char* row = strtok(temp, ",");
-				//lines.push_back(tempo);
-			}
-			//add.smd.matricies[i].
-			file.getline(temp, 255, '\n');
+		for (size_t j = 0; j < 4; j++)
+		{
+			file.getline(temp, 255, '(');
 			tempo = temp;
 
-			add.meshID = i;
-			add.modelID = i;
-
-			
+			file.getline(temp, 255, ')');
+			tempo = temp;
+			//char* row = strtok(temp, ",");
+			//lines.push_back(tempo);
 		}
+		//add.smd.matricies[i].
+		file.getline(temp, 255, '\n');
+		tempo = temp;
+
+		add.meshID = idx;
+		add.modelID = idx;
+		models.push_back(add);
+
+		idx++;
 	}
 
+	file.close();
 	return models;
 }
