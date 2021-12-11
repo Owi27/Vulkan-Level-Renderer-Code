@@ -28,6 +28,7 @@ public:
 	VkDeviceMemory deviceMemory2 = nullptr;
 };
 
+
 string FileEndFix(string strings)
 {
 	string temp;
@@ -94,12 +95,11 @@ vector<Model> Text2Model(const char* filename)
 		{
 			tempo = FileEndFix(tempo);
 		}
-		string filepath = "DEV4Git/";
+		string filepath = "../DEV4Git/";
 		filepath.append(tempo);
 		filepath.append(".h2b");
-		add.parse.Parse(filepath.c_str());
-		bool work = add.parse.Parse(filepath.c_str());
-		
+		add.parse.Parse(filepath.c_str()); // Returning True!!!
+		bool check = add.parse.Parse(filepath.c_str());
 		//lines.push_back(tempo);
 
 		for (size_t j = 0; j < 4; j++)
