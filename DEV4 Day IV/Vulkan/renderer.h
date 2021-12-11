@@ -1,8 +1,8 @@
 // minimalistic code to draw a single triangle, this is not part of the API.
 // TODO: Part 1b
 #include "../Vulkan/FSLogo.h"
-//#include "h2bParser.h"
-//#include "Model.h"
+#include "h2bParser.h"
+#include "Model.h"
 #include "shaderc/shaderc.h" // needed for compiling shaders at runtime
 #ifdef _WIN32 // must use MT platform DLL libraries on windows
 	#pragma comment(lib, "shaderc_combined.lib") 
@@ -20,7 +20,7 @@ std::string ShaderAsString(const char* shaderFilePath) {
 	return output;
 }
 
-//vector<Model> models = Text2Model("../DEV4Git/GameLevel.txt");
+vector<Model> models = Text2Model("../DEV4Git/GameLevel.txt");
 
 // Simple Vertex Shader
 std::string verShader = ShaderAsString("../VertexShader.hlsl");

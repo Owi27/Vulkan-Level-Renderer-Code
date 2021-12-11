@@ -3,6 +3,7 @@
 #include "FSLogo.h"
 #include "../../Gateware/Gateware.h"
 #include <vulkan/vulkan.h>
+#include <cstring>
 //#include <vulkan/vulkan_xlib.h>
 using namespace std;
 using namespace H2B;
@@ -71,6 +72,7 @@ string FileEndFix(string strings)
 vector<Model> Text2Model(const char* filename)
 {
 	vector<Model> models;
+	vector<float> rowData;
 	Model add = {};
 
 	ifstream file;
@@ -99,7 +101,6 @@ vector<Model> Text2Model(const char* filename)
 		filepath.append(tempo);
 		filepath.append(".h2b");
 		add.parse.Parse(filepath.c_str()); // Returning True!!!
-		bool check = add.parse.Parse(filepath.c_str());
 		//lines.push_back(tempo);
 
 		for (size_t j = 0; j < 4; j++)
@@ -109,9 +110,21 @@ vector<Model> Text2Model(const char* filename)
 
 			file.getline(temp, 255, ')');
 			tempo = temp;
-			//char* row = strtok(temp, ",");
+			char* token;
+			token = strtok(temp, ",");
+
+			while (token != NULL)
+			{
+				rowData.push_back(atof(token));
+				token = strtok(NULL, ",");
+			}
 			//lines.push_back(tempo);
 		}
+		for (size_t i = 0; i < 16; i++)
+		{
+			add.smd.matricies->data[i] = rowData[i];
+		}
+		rowData.clear();
 		//add.smd.matricies[i].
 		file.getline(temp, 255, '\n');
 		tempo = temp;
