@@ -5,7 +5,7 @@
 #include "Model.h"
 #include "shaderc/shaderc.h" // needed for compiling shaders at runtime
 #ifdef _WIN32 // must use MT platform DLL libraries on windows
-	#pragma comment(lib, "shaderc_combined.lib") 
+#pragma comment(lib, "shaderc_combined.lib") 
 #endif
 
 std::string ShaderAsString(const char* shaderFilePath) {
@@ -20,11 +20,11 @@ std::string ShaderAsString(const char* shaderFilePath) {
 	return output;
 }
 
-vector<Model> models = Text2Model("../DEV4Git/GameLevel.txt");
+vector<Model> models = Text2Model("../DEV4Git/GameLevel2.txt");
 
 // Simple Vertex Shader
 std::string verShader = ShaderAsString("../VertexShader.hlsl");
-const char* vertexShaderSource = verShader.c_str(); 
+const char* vertexShaderSource = verShader.c_str();
 // Simple Pixel Shader
 std::string pixShader = ShaderAsString("../PixelShader.hlsl");
 const char* pixelShaderSource = pixShader.c_str();
@@ -32,15 +32,15 @@ const char* pixelShaderSource = pixShader.c_str();
 class Renderer
 {
 	// TODO: Part 2b
-#define MAX_SUBMESH_PER_DRAW 1024
-	struct SHADER_MODEL_DATA
-	{
-		GW::MATH::GVECTORF sunDirection, sunColor;
-		GW::MATH::GMATRIXF view, projection;
+//#define MAX_SUBMESH_PER_DRAW 1024
+	//struct SHADER_MODEL_DATA
+	//{
+	//	GW::MATH::GVECTORF sunDirection, sunColor;
+	//	GW::MATH::GMATRIXF view, projection;
 
-		GW::MATH::GMATRIXF matricies[MAX_SUBMESH_PER_DRAW];
-		OBJ_ATTRIBUTES materials[MAX_SUBMESH_PER_DRAW];
-	};
+	//	GW::MATH::GMATRIXF matricies[MAX_SUBMESH_PER_DRAW];
+	//	OBJ_ATTRIBUTES materials[MAX_SUBMESH_PER_DRAW];
+	//};
 
 	struct MaterialData
 	{
@@ -54,7 +54,9 @@ class Renderer
 	GW::SYSTEM::GWindow win;
 	GW::GRAPHICS::GVulkanSurface vlk;
 	GW::CORE::GEventReceiver shutdown;
-	
+	GW::INPUT::GInput gInputProxy;
+	GW::INPUT::GController gControllerProxy;
+
 	// what we need at a minimum to draw a triangle
 	VkDevice device = nullptr;
 	VkBuffer vertexHandle = nullptr;
@@ -63,8 +65,8 @@ class Renderer
 	VkBuffer buffer2 = nullptr;
 	VkDeviceMemory deviceMemory2 = nullptr;
 	// TODO: Part 2c
-	std::vector<VkBuffer> bufferVector;
-	std::vector<VkDeviceMemory> memoryVector;
+	//std::vector<VkBuffer> bufferVector;
+	//std::vector<VkDeviceMemory> memoryVector;
 
 	VkShaderModule vertexShader = nullptr;
 	VkShaderModule pixelShader = nullptr;
@@ -77,19 +79,24 @@ class Renderer
 	VkDescriptorPool vkPool = nullptr;
 	// TODO: Part 2g
 	VkDescriptorSet vkDS = nullptr;
-		// TODO: Part 4f
-		
+
+	// TODO: Part 4f
+
+	vector<SHADER_MODEL_DATA> smdVec;
+
 	// TODO: Part 2a
 	GW::MATH::GMatrix mProxy;
 	GW::MATH::GMATRIXF project = GW::MATH::GIdentityMatrixF;
-	GW::MATH::GVECTORF eye = {0.75f, 0.25f, -1.5f, 0};
-	GW::MATH::GVECTORF at = {0.15f, 0.75f, 0};
-	GW::MATH::GVECTORF up = {0, 1, 0};
-	GW::MATH::GVECTORF LightDir = {-1, -1, 2};
-	GW::MATH::GVECTORF LightCol = {0.9, 0.9, 1, 1};
+	GW::MATH::GVECTORF eye = { 5.75f, 5.25f, -30.5f, 0 };
+	GW::MATH::GVECTORF at = { 0.15f, 5.75f, 0 };
+	GW::MATH::GVECTORF up = { 0, 1, 0 };
+	GW::MATH::GVECTORF LightDir = { -1, -1, 2 };
+	GW::MATH::GVECTORF LightCol = { 1.0f, 0.73f, 0.75f, 1 };
 	// TODO: Part 2b
-	SHADER_MODEL_DATA smd;
+	//SHADER_MODEL_DATA smd;
 	GW::MATH::GMATRIXF cam;
+			float aspect = 0.0f;
+
 	// TODO: Part 4g
 public:
 
@@ -99,30 +106,33 @@ public:
 		vlk = _vlk;
 		unsigned int image = 0;
 		vlk.GetSwapchainImageCount(image);
+
 		bufferVector.resize(image);
 		memoryVector.resize(image);
-
 
 		unsigned int width, height;
 		win.GetClientWidth(width);
 		win.GetClientHeight(height);
 		// TODO: Part 2a
 		mProxy.Create();
-		float aspect = 0.0f;
+		gInputProxy.Create(win);
+		gControllerProxy.Create();
 		vlk.GetAspectRatio(aspect);
-		mProxy.ProjectionVulkanLHF(G_DEGREE_TO_RADIAN(65), aspect, 0.1f, 100.0f, smd.projection);
 		// TODO: Part 2b
-		mProxy.IdentityF(smd.view);
-		mProxy.LookAtLHF(eye, at, up, smd.view);
-		smd.sunColor = LightCol;
-		smd.sunDirection = LightDir;
-		mProxy.IdentityF(smd.matricies[0]);
-		mProxy.IdentityF(smd.matricies[1]);
-		smd.materials[0] = FSLogo_materials[0].attrib;
-		smd.materials[1] = FSLogo_materials[1].attrib;
+		for (size_t i = 0; i < models.size(); i++)
+		{
+			mProxy.ProjectionVulkanLHF(G_DEGREE_TO_RADIAN(65), aspect, 0.1f, 100.0f, models[i].smd.projection);
+			mProxy.IdentityF(models[i].smd.view);
+			mProxy.LookAtLHF(eye, at, up, models[i].smd.view);
+			models[i].smd.sunColor = LightCol;
+			models[i].smd.sunDirection = LightDir;
+			models[i].smd.sunColor = LightCol;
+		}
+		/*models[0].smd.sunColor = LightCol;
+		models[0].smd.sunDirection = LightDir;*/
+		//mProxy.IdentityF(models[0].smd.matricies[1]);
 		// TODO: Part 4g
 		// TODO: part 3b
-
 
 		/***************** GEOMETRY INTIALIZATION ******************/
 		// Grab the device & physical device so we can allocate some stuff
@@ -140,23 +150,46 @@ public:
 			verts[i+2] = FSLogo_vertices[i].pos.z;
 		}*/
 		// Transfer triangle data to the vertex buffer. (staging would be prefered here)
-		GvkHelper::create_buffer(physicalDevice, device, sizeof(FSLogo_vertices),
-			VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | 
-			VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &vertexHandle, &vertexData);
-		GvkHelper::write_to_buffer(device, vertexData, FSLogo_vertices, sizeof(FSLogo_vertices));
+		//GvkHelper::create_buffer(physicalDevice, device, sizeof(FSLogo_vertices),
+		//	VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+		//	VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &vertexHandle, &vertexData);
+		//GvkHelper::write_to_buffer(device, vertexData, FSLogo_vertices, sizeof(FSLogo_vertices));
+
+		for (size_t i = 0; i < models.size(); i++)
+		{
+			GvkHelper::create_buffer(physicalDevice, device, sizeof(H2B::VERTEX) * models[i].parse.vertices.size(),
+				VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+				VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &models[i].buffer, &models[i].deviceMemory);
+			GvkHelper::write_to_buffer(device, models[i].deviceMemory, models[i].parse.vertices.data(), sizeof(H2B::VERTEX) * models[i].parse.vertices.size());
+
+			GvkHelper::create_buffer(physicalDevice, device, sizeof(unsigned int) * models[i].parse.indices.size(),
+				VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+				VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &models[i].indicieBuffer, &models[i].indicieMemory);
+			GvkHelper::write_to_buffer(device, models[i].indicieMemory, models[i].parse.indices.data(), sizeof(unsigned int) * models[i].parse.indices.size());
+		}
 		// TODO: Part 1g
-		GvkHelper::create_buffer(physicalDevice, device, sizeof(FSLogo_indices),
+		/*GvkHelper::create_buffer(physicalDevice, device, sizeof(FSLogo_indices),
 			VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
 			VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &buffer2, &deviceMemory2);
-		GvkHelper::write_to_buffer(device, deviceMemory2, FSLogo_indices, sizeof(FSLogo_indices));
+		GvkHelper::write_to_buffer(device, deviceMemory2, FSLogo_indices, sizeof(FSLogo_indices));*/
 		// TODO: Part 2d
-		for (int i = 0; i < image; i++)
+		for (size_t i = 0; i < models.size(); i++)
 		{
-			GvkHelper::create_buffer(physicalDevice, device, sizeof(SHADER_MODEL_DATA),
-				VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-				VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &bufferVector[i], &memoryVector[i]);
-			GvkHelper::write_to_buffer(device, memoryVector[i], &smd, sizeof(SHADER_MODEL_DATA));
+			smdVec.push_back(models[i].smd);
 		}
+		for (int j = 0; j < image; j++)
+		{
+			GvkHelper::create_buffer(physicalDevice, device, sizeof(SHADER_MODEL_DATA) * smdVec.size(),
+				VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+				VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &bufferVector[j], &memoryVector[j]);
+			GvkHelper::write_to_buffer(device, memoryVector[j], smdVec.data(), sizeof(SHADER_MODEL_DATA) * smdVec.size());
+		}
+
+
+		//GvkHelper::create_buffer(physicalDevice, device, sizeof(Model::smd),
+		//	VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+		//	VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &bufferVector[i], &memoryVector[i]);
+		//GvkHelper::write_to_buffer(device, memoryVector[i], &smd, sizeof(Model::smd));
 
 		/***************** SHADER INTIALIZATION ******************/
 		// Intialize runtime shader compiler HLSL -> SPIRV
@@ -228,9 +261,9 @@ public:
 		input_vertex_info.pVertexAttributeDescriptions = vertex_attribute_description;
 		// Viewport State (we still need to set this up even though we will overwrite the values)
 		VkViewport viewport = {
-            0, 0, static_cast<float>(width), static_cast<float>(height), 0, 1
-        };
-        VkRect2D scissor = { {0, 0}, {width, height} };
+			0, 0, static_cast<float>(width), static_cast<float>(height), 0, 1
+		};
+		VkRect2D scissor = { {0, 0}, {width, height} };
 		VkPipelineViewportStateCreateInfo viewport_create_info = {};
 		viewport_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
 		viewport_create_info.viewportCount = 1;
@@ -290,7 +323,7 @@ public:
 		color_blend_create_info.blendConstants[2] = 0.0f;
 		color_blend_create_info.blendConstants[3] = 0.0f;
 		// Dynamic State 
-		VkDynamicState dynamic_state[2] = { 
+		VkDynamicState dynamic_state[2] = {
 			// By setting these we do not need to re-create the pipeline on Resize
 			VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR
 		};
@@ -298,7 +331,7 @@ public:
 		dynamic_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
 		dynamic_create_info.dynamicStateCount = 2;
 		dynamic_create_info.pDynamicStates = dynamic_state;
-		
+
 		// TODO: Part 2e
 		VkDescriptorSetLayoutBinding desc_layout_binding = {};
 		desc_layout_binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
@@ -316,7 +349,7 @@ public:
 		// TODO: Part 2f
 		VkDescriptorPoolSize desc_pool_size = {};
 		desc_pool_size.type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-		desc_pool_size.descriptorCount = 1; 
+		desc_pool_size.descriptorCount = 1;
 		VkDescriptorPoolCreateInfo desc_pool_info = {};
 		desc_pool_info.poolSizeCount = 1;
 		desc_pool_info.pNext = nullptr;
@@ -325,8 +358,8 @@ public:
 		desc_pool_info.maxSets = 1;
 
 		vkCreateDescriptorPool(device, &desc_pool_info, nullptr, &vkPool);
-			// TODO: Part 4f
-		// TODO: Part 2g
+		// TODO: Part 4f
+	// TODO: Part 2g
 		VkDescriptorSetAllocateInfo desc_set_info = {};
 		desc_set_info.descriptorPool = vkPool;
 		desc_set_info.descriptorSetCount = 1;
@@ -335,8 +368,8 @@ public:
 		desc_set_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
 
 		vkAllocateDescriptorSets(device, &desc_set_info, &vkDS);
-			// TODO: Part 4f
-		// TODO: Part 2h
+		// TODO: Part 4f
+	// TODO: Part 2h
 		VkDescriptorBufferInfo desc_buff_info = {};
 		desc_buff_info.buffer = bufferVector[0];
 		desc_buff_info.offset = 0;
@@ -352,10 +385,10 @@ public:
 		write_desc_set.pBufferInfo = &desc_buff_info;
 
 		vkUpdateDescriptorSets(device, 1, &write_desc_set, 0, nullptr);
-			// TODO: Part 4f
+		// TODO: Part 4f
 		VkPushConstantRange constant_range_info = {};
 		constant_range_info.offset = 0;
-		constant_range_info.size = sizeof(unsigned int);
+		constant_range_info.size = sizeof(unsigned int) * 2;
 		constant_range_info.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
 		// Descriptor pipeline layout
 		VkPipelineLayoutCreateInfo pipeline_layout_create_info = {};
@@ -366,9 +399,9 @@ public:
 		// TODO: Part 3c
 		pipeline_layout_create_info.pushConstantRangeCount = 1;
 		pipeline_layout_create_info.pPushConstantRanges = &constant_range_info;
-		vkCreatePipelineLayout(device, &pipeline_layout_create_info, 
+		vkCreatePipelineLayout(device, &pipeline_layout_create_info,
 			nullptr, &pipelineLayout);
-	    // Pipeline State... (FINALLY) 
+		// Pipeline State... (FINALLY) 
 		VkGraphicsPipelineCreateInfo pipeline_create_info = {};
 		pipeline_create_info.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
 		pipeline_create_info.stageCount = 2;
@@ -385,7 +418,7 @@ public:
 		pipeline_create_info.renderPass = renderPass;
 		pipeline_create_info.subpass = 0;
 		pipeline_create_info.basePipelineHandle = VK_NULL_HANDLE;
-		vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, 
+		vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1,
 			&pipeline_create_info, nullptr, &pipeline);
 
 		/***************** CLEANUP / SHUTDOWN ******************/
@@ -394,16 +427,16 @@ public:
 			if (+shutdown.Find(GW::GRAPHICS::GVulkanSurface::Events::RELEASE_RESOURCES, true)) {
 				CleanUp(); // unlike D3D we must be careful about destroy timing
 			}
-		});
+			});
 	}
 	void Render()
 	{
 		// TODO: Part 2a
-		auto now = std::chrono::steady_clock::now();
-		deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(now - lastUpdate).count() / 1000000.0f; //seconds
-		lastUpdate = now;
+		//auto now = std::chrono::steady_clock::now();
+		//deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(now - lastUpdate).count() / 1000000.0f; //seconds
+		//lastUpdate = now;
 
-		mProxy.RotateYLocalF(smd.matricies[1], deltaTime, smd.matricies[1]);
+		//mProxy.RotateYLocalF(smd.matricies[1], deltaTime, smd.matricies[1]);
 
 		// TODO: Part 4d
 		// grab the current Vulkan commandBuffer
@@ -417,17 +450,15 @@ public:
 		win.GetClientHeight(height);
 		// setup the pipeline's dynamic settings
 		VkViewport viewport = {
-            0, 0, static_cast<float>(width), static_cast<float>(height), 0, 1
-        };
-        VkRect2D scissor = { {0, 0}, {width, height} };
+			0, 0, static_cast<float>(width), static_cast<float>(height), 0, 1
+		};
+		VkRect2D scissor = { {0, 0}, {width, height} };
 		vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
 		vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
-		
+
 		// now we can draw
 		VkDeviceSize offsets[] = { 0 };
-		vkCmdBindVertexBuffers(commandBuffer, 0, 1, &vertexHandle, offsets);
-		vkCmdBindIndexBuffer(commandBuffer, buffer2, 0, VkIndexType::VK_INDEX_TYPE_UINT32);
 		// TODO: Part 1h
 		vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout,
 			0, 1, &vkDS, 0, nullptr);
@@ -436,22 +467,156 @@ public:
 		// TODO: Part 4d
 		// TODO: Part 2i
 		// TODO: Part 3b
-		GvkHelper::write_to_buffer(device, memoryVector[0], &smd, sizeof(smd));
 
-		MaterialData materialData[2] = {};
-		for (int i = 0; i < 2; i++)
+		for (size_t i = 0; i < smdVec.size(); i++)
 		{
-			materialData[i].idx = FSLogo_meshes[i].materialIndex;
-			vkCmdPushConstants(commandBuffer, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 
-				0, sizeof(unsigned int), &materialData[i].idx);
-			vkCmdDrawIndexed(commandBuffer, FSLogo_meshes[i].indexCount, 1, FSLogo_meshes[i].indexOffset, 0, 0);
+			smdVec[i].view = models[i].smd.view;
+		}
+		GvkHelper::write_to_buffer(device, memoryVector[0], smdVec.data(), sizeof(SHADER_MODEL_DATA) * smdVec.size());
+
+		//const int sizee = models.size();
+		vector<unsigned int> materialData;
+		for (int i = 0; i < models.size(); i++)
+		{
+			vkCmdBindVertexBuffers(commandBuffer, 0, 1, &models[i].buffer, offsets);
+			vkCmdBindIndexBuffer(commandBuffer, models[i].indicieBuffer, 0, VkIndexType::VK_INDEX_TYPE_UINT32);
+
+			for (int j = 0; j < models[i].parse.meshes.size(); j++)
+			{
+				unsigned int ID[2] = { i, models[i].parse.meshes[j].materialIndex };
+				vkCmdPushConstants(commandBuffer, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+					0, sizeof(unsigned int) * 2, ID);
+				vkCmdDrawIndexed(commandBuffer, models[i].parse.meshes[j].drawInfo.indexCount, 1,
+					models[i].parse.meshes[j].drawInfo.indexOffset, 0, 0);
+			}
 		}
 
-			// TODO: Part 3d
-		//vkCmdDraw(commandBuffer, 3885, 1, 0, 0); // TODO: Part 1d, 1h
-		
+		/*vkCmdBindVertexBuffers(commandBuffer, 0, 1, &models[0].buffer, offsets);
+		vkCmdBindIndexBuffer(commandBuffer, models[0].indicieBuffer, 0, VkIndexType::VK_INDEX_TYPE_UINT32);
+		GvkHelper::write_to_buffer(device, memoryVector[0], &models[0].smd, sizeof(SHADER_MODEL_DATA));
+
+		for (size_t i = 0; i < 1; i++)
+		{
+			vkCmdPushConstants(commandBuffer, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+				0, sizeof(unsigned int), &models[0].parse.meshes[i].materialIndex);
+			vkCmdDrawIndexed(commandBuffer, models[0].parse.meshes[i].drawInfo.indexCount, 1,
+				models[0].parse.meshes[i].drawInfo.indexOffset, 0, 0);
+		}*/
+		// TODO: Part 3d
+	//vkCmdDraw(commandBuffer, 3885, 1, 0, 0); // TODO: Part 1d, 1h
+
 	}
-	
+
+	void UpdateCamera()
+	{
+		GW::MATH::GMATRIXF cam = GW::MATH::GIdentityMatrixF;
+
+		auto now = std::chrono::steady_clock::now();
+		deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(now - lastUpdate).count() / 1000000.0f; //seconds
+		lastUpdate = now;
+
+		// TODO: Part 4c
+		mProxy.InverseF(models[0].smd.view, cam);
+		// TODO: Part 4d
+		float y = 0.0f;
+
+		float totalY = 0.0f;
+		float totalZ = 0.0f;
+		float totalX = 0.0f;
+
+		const float Camera_Speed = 5.0f;
+		float spaceKeyState = 0.0f;
+		float leftShiftState = 0.0f;
+		float rightTriggerState = 0.0f;
+		float leftTriggerState = 0.0f;
+		float wKeyState = 0.0f;
+		float sKeyState = 0.0f;
+		float aKeyState = 0.0f;
+		float dKeyState = 0.0f;
+		float leftStickX = 0.0f;
+		float leftStickY = 0.0f;
+		unsigned int screenHeight = 0.0f;
+		win.GetHeight(screenHeight);
+		unsigned int screenWidth = 0.0f;
+		win.GetWidth(screenWidth);
+		float mouseDeltaX = 0.0f;
+		float mouseDeltaY = 0.0f;
+		gInputProxy.GetMouseDelta(mouseDeltaX, mouseDeltaY);
+		float rightStickYaxis = 0.0f;
+		gControllerProxy.GetState(0, G_RY_AXIS, rightStickYaxis);
+		float rightStickXaxis = 0.0f;
+		gControllerProxy.GetState(0, G_RX_AXIS, rightStickXaxis);
+
+		float perFrameSpeed = 0.0f;
+
+		if (G_PASS(gInputProxy.GetState(G_KEY_SPACE, spaceKeyState)) &&
+			spaceKeyState != 0 ||
+
+			G_PASS(gInputProxy.GetState(G_KEY_LEFTSHIFT, leftShiftState)) &&
+			leftShiftState != 0 ||
+
+			G_PASS(gControllerProxy.GetState(0, G_RIGHT_TRIGGER_AXIS, rightTriggerState)) &&
+			rightTriggerState != 0 ||
+
+			G_PASS(gControllerProxy.GetState(0, G_LEFT_TRIGGER_AXIS, leftTriggerState)) &&
+			leftTriggerState != 0)
+		{
+			totalY = spaceKeyState - leftShiftState + rightTriggerState - leftTriggerState;
+		}
+
+		cam.row4.y += totalY * Camera_Speed * deltaTime;
+
+		// TODO: Part 4e
+		perFrameSpeed = Camera_Speed * deltaTime;
+
+		if (G_PASS(gInputProxy.GetState(G_KEY_W, wKeyState)) &&
+			wKeyState != 0 ||
+
+			G_PASS(gInputProxy.GetState(G_KEY_A, aKeyState)) &&
+			aKeyState != 0 ||
+
+			G_PASS(gInputProxy.GetState(G_KEY_S, sKeyState)) &&
+			sKeyState != 0 ||
+
+			G_PASS(gInputProxy.GetState(G_KEY_D, dKeyState)) &&
+			dKeyState != 0 ||
+
+			G_PASS(gControllerProxy.GetState(0, G_LX_AXIS, leftStickX)) &&
+			leftStickX != 0 ||
+
+			G_PASS(gControllerProxy.GetState(0, G_LY_AXIS, leftStickY)) &&
+			leftStickY != 0)
+		{
+			totalZ = wKeyState - sKeyState + leftStickY;
+			totalX = dKeyState - aKeyState + leftStickX;
+		}
+
+		GW::MATH::GMATRIXF translation = GW::MATH::GIdentityMatrixF;
+		GW::MATH::GVECTORF vec = { totalX * perFrameSpeed, 0, totalZ * perFrameSpeed };
+		mProxy.TranslateLocalF(translation, vec, translation);
+		mProxy.MultiplyMatrixF(translation, cam, cam);
+		// TODO: Part 4f
+		float thumbSpeed = 3.14 * perFrameSpeed;
+		float totalPitch = G_DEGREE_TO_RADIAN(65) * mouseDeltaY / screenHeight + rightStickYaxis * -thumbSpeed;
+		GW::MATH::GMATRIXF pitchMatrix = GW::MATH::GIdentityMatrixF;
+		mProxy.RotationYawPitchRollF(0, totalPitch, 0, pitchMatrix);
+		mProxy.MultiplyMatrixF(pitchMatrix, cam, cam);
+		// TODO: Part 4g
+		float totalYaw = G_DEGREE_TO_RADIAN(65) * aspect * mouseDeltaX / screenWidth + rightStickXaxis * thumbSpeed;
+		GW::MATH::GMATRIXF yawMatrix = GW::MATH::GIdentityMatrixF;
+		mProxy.RotationYawPitchRollF(totalYaw, 0, 0, yawMatrix);
+		GW::MATH::GMATRIXF camSave = cam;
+		mProxy.MultiplyMatrixF(cam, yawMatrix, cam);
+		cam = camSave;
+		// TODO: Part 4c
+		mProxy.InverseF(cam, models[0].smd.view);
+		for (size_t i = 1; i < models.size(); i++)
+		{
+			models[i].smd.view = models[0].smd.view;
+		}
+	}
+
+
 private:
 	void CleanUp()
 	{
@@ -462,7 +627,7 @@ private:
 		vkDestroyBuffer(device, buffer2, nullptr);
 		vkFreeMemory(device, deviceMemory2, nullptr);
 		// TODO: Part 2d
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < models.size(); i++)
 		{
 			vkDestroyBuffer(device, bufferVector[i], nullptr);
 			vkFreeMemory(device, memoryVector[i], nullptr);

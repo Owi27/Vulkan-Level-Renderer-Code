@@ -61,39 +61,38 @@ C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.
 C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(64075): message : see declaration of 'GW::I::GAudioImplementation::ResumeMusic'
 C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(65019,3): warning C4250: 'GW::I::GAudio3DImplementation': inherits 'GW::I::GAudioImplementation::GW::I::GAudioImplementation::StopMusic' via dominance
 C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(64079): message : see declaration of 'GW::I::GAudioImplementation::StopMusic'
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(70735,3): warning C4250: 'GW::I::GBufferedInputImplementation': inherits 'GW::I::GEventGeneratorImplementation::GW::I::GEventGeneratorImplementation::Register' via dominance
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(4724): message : see declaration of 'GW::I::GEventGeneratorImplementation::Register'
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(70735,3): warning C4250: 'GW::I::GBufferedInputImplementation': inherits 'GW::I::GEventGeneratorImplementation::GW::I::GEventGeneratorImplementation::Deregister' via dominance
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(4737): message : see declaration of 'GW::I::GEventGeneratorImplementation::Deregister'
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(70735,3): warning C4250: 'GW::I::GBufferedInputImplementation': inherits 'GW::I::GEventGeneratorImplementation::GW::I::GEventGeneratorImplementation::Observers' via dominance
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(4760): message : see declaration of 'GW::I::GEventGeneratorImplementation::Observers'
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(70735,3): warning C4250: 'GW::I::GBufferedInputImplementation': inherits 'GW::I::GEventGeneratorImplementation::GW::I::GEventGeneratorImplementation::Push' via dominance
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(4768): message : see declaration of 'GW::I::GEventGeneratorImplementation::Push'
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(74103,3): warning C4250: 'GW::I::GControllerImplementation': inherits 'GW::I::GEventGeneratorImplementation::GW::I::GEventGeneratorImplementation::Register' via dominance
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(4724): message : see declaration of 'GW::I::GEventGeneratorImplementation::Register'
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(74103,3): warning C4250: 'GW::I::GControllerImplementation': inherits 'GW::I::GEventGeneratorImplementation::GW::I::GEventGeneratorImplementation::Deregister' via dominance
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(4737): message : see declaration of 'GW::I::GEventGeneratorImplementation::Deregister'
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(74103,3): warning C4250: 'GW::I::GControllerImplementation': inherits 'GW::I::GEventGeneratorImplementation::GW::I::GEventGeneratorImplementation::Observers' via dominance
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(4760): message : see declaration of 'GW::I::GEventGeneratorImplementation::Observers'
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(74103,3): warning C4250: 'GW::I::GControllerImplementation': inherits 'GW::I::GEventGeneratorImplementation::GW::I::GEventGeneratorImplementation::Push' via dominance
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(4768): message : see declaration of 'GW::I::GEventGeneratorImplementation::Push'
 C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\h2bParser.h(81,22): warning C4018: '<': signed/unsigned mismatch
 C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\h2bParser.h(96,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\Model.h(118,27): warning C4244: 'argument': conversion from 'double' to '_Ty', possible loss of data
+C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\Model.h(124,27): warning C4244: 'argument': conversion from 'double' to '_Ty', possible loss of data
           with
           [
               _Ty=float
           ]
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\Model.h(114,12): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\Model.h(119,13): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\renderer.h(89,48): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\renderer.h(153,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\Model.h(120,12): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\Model.h(125,13): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\renderer.h(163,1): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\renderer.h(168,1): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\renderer.h(180,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\renderer.h(185,1): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\renderer.h(475,1): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\renderer.h(486,28): warning C4838: conversion from 'int' to 'unsigned int' requires a narrowing conversion
+C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\renderer.h(538,29): warning C4244: 'initializing': conversion from 'float' to 'unsigned int', possible loss of data
+C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\renderer.h(540,28): warning C4244: 'initializing': conversion from 'float' to 'unsigned int', possible loss of data
+C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\renderer.h(599,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\renderer.h(600,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\renderer.h(605,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(16886,4): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
               _Ty=double
           ]
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\renderer.h(113): message : see reference to function template instantiation 'GW::GReturn GW::MATH::GMatrix::ProjectionVulkanLHF<double,float&,float,float,GW::MATH::GMATRIXF&>(double &&,float &,float &&,float &&,GW::MATH::GMATRIXF &)' being compiled
+C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\renderer.h(124): message : see reference to function template instantiation 'GW::GReturn GW::MATH::GMatrix::ProjectionVulkanLHF<double,float&,float,float,GW::MATH::GMATRIXF&>(double &&,float &,float &&,float &&,GW::MATH::GMATRIXF &)' being compiled
+C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(16877,4): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\renderer.h(602): message : see reference to function template instantiation 'GW::GReturn GW::MATH::GMatrix::RotationYawPitchRollF<int,float&,int,GW::MATH::GMATRIXF&>(int &&,float &,int &&,GW::MATH::GMATRIXF &)' being compiled
 C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(1496,1): warning C4244: 'argument': conversion from '_Ty' to 'unsigned int', possible loss of data
           with
           [
@@ -101,7 +100,7 @@ C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.
           ]
 C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(1597): message : see reference to function template instantiation 'GW::GReturn GW::I::GProxy<GW::I::GVulkanSurfaceInterface,GW::I::GVulkanSurfaceImplementation,GW::SYSTEM::GWindow,unsigned __int64>::allocate<GW::SYSTEM::GWindow,GW::GRAPHICS::GGraphicsInitOptions,unsigned __int64,const char**,int,nullptr,int,nullptr,bool>(GW::SYSTEM::GWindow &&,GW::GRAPHICS::GGraphicsInitOptions &&,unsigned __int64 &&,const char **&&,int &&,nullptr &&,int &&,nullptr &&,bool &&)' being compiled
 C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\../Gateware/Gateware.h(1597): message : see reference to function template instantiation 'GW::GReturn GW::I::GProxy<GW::I::GVulkanSurfaceInterface,GW::I::GVulkanSurfaceImplementation,GW::SYSTEM::GWindow,unsigned __int64>::allocate<GW::SYSTEM::GWindow,GW::GRAPHICS::GGraphicsInitOptions,unsigned __int64,const char**,int,nullptr,int,nullptr,bool>(GW::SYSTEM::GWindow &&,GW::GRAPHICS::GGraphicsInitOptions &&,unsigned __int64 &&,const char **&&,int &&,nullptr &&,int &&,nullptr &&,bool &&)' being compiled
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\main.cpp(47): message : see reference to function template instantiation 'GW::GReturn GW::I::GProxy<GW::I::GVulkanSurfaceInterface,GW::I::GVulkanSurfaceImplementation,GW::SYSTEM::GWindow,unsigned __int64>::Create<GW::SYSTEM::GWindow,GW::GRAPHICS::GGraphicsInitOptions,unsigned __int64,const char**,int,nullptr,int,nullptr,bool,std::enable_if<true,void>>(GW::SYSTEM::GWindow,GW::GRAPHICS::GGraphicsInitOptions,unsigned __int64,const char **,int,nullptr,int,nullptr,bool)' being compiled
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\main.cpp(45): message : see reference to function template instantiation 'GW::GReturn GW::I::GProxy<GW::I::GVulkanSurfaceInterface,GW::I::GVulkanSurfaceImplementation,GW::SYSTEM::GWindow,unsigned __int64>::Create<GW::SYSTEM::GWindow,GW::GRAPHICS::GGraphicsInitOptions,unsigned __int64,const char**,int,nullptr,int,nullptr,bool,std::enable_if<true,void>>(GW::SYSTEM::GWindow,GW::GRAPHICS::GGraphicsInitOptions,unsigned __int64,const char **,int,nullptr,int,nullptr,bool)' being compiled
-C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\Model.h(70): warning C4715: 'FileEndFix': not all control paths return a value
+C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\main.cpp(48): message : see reference to function template instantiation 'GW::GReturn GW::I::GProxy<GW::I::GVulkanSurfaceInterface,GW::I::GVulkanSurfaceImplementation,GW::SYSTEM::GWindow,unsigned __int64>::Create<GW::SYSTEM::GWindow,GW::GRAPHICS::GGraphicsInitOptions,unsigned __int64,const char**,int,nullptr,int,nullptr,bool,std::enable_if<true,void>>(GW::SYSTEM::GWindow,GW::GRAPHICS::GGraphicsInitOptions,unsigned __int64,const char **,int,nullptr,int,nullptr,bool)' being compiled
+C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\main.cpp(46): message : see reference to function template instantiation 'GW::GReturn GW::I::GProxy<GW::I::GVulkanSurfaceInterface,GW::I::GVulkanSurfaceImplementation,GW::SYSTEM::GWindow,unsigned __int64>::Create<GW::SYSTEM::GWindow,GW::GRAPHICS::GGraphicsInitOptions,unsigned __int64,const char**,int,nullptr,int,nullptr,bool,std::enable_if<true,void>>(GW::SYSTEM::GWindow,GW::GRAPHICS::GGraphicsInitOptions,unsigned __int64,const char **,int,nullptr,int,nullptr,bool)' being compiled
+C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\Model.h(75): warning C4715: 'FileEndFix': not all control paths return a value
   Lab4_Vulkan.vcxproj -> C:\Users\owens\Documents\GitHub\DEV4Git\DEV4 Day IV\Vulkan\build\Debug\Lab4_Vulkan.exe

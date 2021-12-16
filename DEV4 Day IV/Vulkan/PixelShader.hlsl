@@ -3,8 +3,7 @@
 cbuffer MeshData
 {
     uint mesh_ID;
-    matrix pad;
-    matrix pad2;
+    uint material_ID;
 };
 
 struct OBJ_ATTRIBUTES
@@ -21,6 +20,7 @@ struct OBJ_ATTRIBUTES
     uint illum;
 };
 
+#define arrSize 20
 struct SHADER_MODEL_DATA
 {
     float4 sunDirection;
@@ -28,8 +28,8 @@ struct SHADER_MODEL_DATA
     matrix view;
     matrix projection; //viewing
 
-    matrix matrices[1024]; //world space transformations
-    OBJ_ATTRIBUTES materials[1024]; //Color/texture of surface
+    matrix matrices[arrSize]; //world space transformations
+    OBJ_ATTRIBUTES materials[arrSize]; //Color/texture of surface
 };
 
 struct OutVertex
@@ -48,9 +48,10 @@ StructuredBuffer<SHADER_MODEL_DATA> sceneData;
 // TODO: Part 4b
 float4 main(OutVertex outVert) : SV_TARGET
 {
-    float ratio = saturate(dot(normalize(-sceneData[0].sunDirection.xyz), normalize(outVert.nrm)));
+    //return float4(sceneData[mesh_ID].materials[0].Kd, 1);
+    float ratio = saturate(dot(normalize(-sceneData[mesh_ID].sunDirection.xyz), normalize(outVert.nrm)));
 	// TODO: Part 3a
-    float4 color = float4(sceneData[0].materials[mesh_ID].Kd, 0) * sceneData[0].sunColor * ratio;
+    float4 color = float4(sceneData[mesh_ID].materials[material_ID].Kd, 0) * sceneData[mesh_ID].sunColor * ratio;
     //color = ratio * sceneData[0].sunColor * float4(sceneData[0].materials[mesh_ID].Kd, 0);
 	// TODO: Part 4c
 	// TODO: Part 4g (half-vector or reflect method your choice)
