@@ -139,7 +139,7 @@ vector<Model> Text2Model(const char* filename)
 		add.meshID = idx;
 		add.modelID = idx;
 
-		for (size_t i = 0; i < add.parse.materials.size(); i++)
+		for (size_t i = 0; i < add.parse.materialCount; i++)
 		{
 			add.smd.materials[i] = add.parse.materials[i].attrib;
 		}

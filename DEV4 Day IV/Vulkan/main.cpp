@@ -4,6 +4,7 @@
 #define GATEWARE_ENABLE_GRAPHICS // Enables all Graphics Libraries
 #define GATEWARE_ENABLE_MATH
 #define GATEWARE_ENABLE_INPUT
+#define GATEWARE_ENABLE_AUDIO
 // TODO: Part 3a
 // Ignore some GRAPHICS libraries we aren't going to use
 #define GATEWARE_DISABLE_GDIRECTX11SURFACE // we have another template for this
@@ -29,7 +30,7 @@ int main()
 		// TODO: Part 1a
 		win.SetWindowName("Owens N. - Lab 4: Vulkan");
 		VkClearValue clrAndDepth[2];
-		clrAndDepth[0].color = { {1.0f, 0.73f, 0.75f, 1} };
+		clrAndDepth[0].color = { {1.0f, 1.0f, 1.0f, 1} };
 		clrAndDepth[1].depthStencil = { 1.0f, 0u };
 		msgs.Create([&](const GW::GEvent& e) {
 			GW::SYSTEM::GWindow::Events q;

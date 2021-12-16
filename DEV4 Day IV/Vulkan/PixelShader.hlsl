@@ -48,14 +48,15 @@ StructuredBuffer<SHADER_MODEL_DATA> sceneData;
 // TODO: Part 4b
 float4 main(OutVertex outVert) : SV_TARGET
 {
-    //return float4(sceneData[mesh_ID].materials[0].Kd, 1);
+    //return float4(sceneData[mesh_ID].materials[material_ID].Kd, 1);
     float ratio = saturate(dot(normalize(-sceneData[mesh_ID].sunDirection.xyz), normalize(outVert.nrm)));
+    ratio = ratio + 1.5f, 0, 1;
 	// TODO: Part 3a
     float4 color = float4(sceneData[mesh_ID].materials[material_ID].Kd, 0) * sceneData[mesh_ID].sunColor * ratio;
     //color = ratio * sceneData[0].sunColor * float4(sceneData[0].materials[mesh_ID].Kd, 0);
 	// TODO: Part 4c
 	// TODO: Part 4g (half-vector or reflect method your choice)
-	return color; // TODO: Part 1a
+    return color; // TODO: Part 1a
 
 
 }

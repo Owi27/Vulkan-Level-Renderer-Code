@@ -20,7 +20,7 @@ std::string ShaderAsString(const char* shaderFilePath) {
 	return output;
 }
 
-vector<Model> models = Text2Model("../DEV4Git/GameLevel2.txt");
+vector<Model> models = Text2Model("../DEV4Git/FoodLevel.txt");
 
 // Simple Vertex Shader
 std::string verShader = ShaderAsString("../VertexShader.hlsl");
@@ -56,6 +56,7 @@ class Renderer
 	GW::CORE::GEventReceiver shutdown;
 	GW::INPUT::GInput gInputProxy;
 	GW::INPUT::GController gControllerProxy;
+	GW::AUDIO::GMusic gMusic;
 
 	// what we need at a minimum to draw a triangle
 	VkDevice device = nullptr;
@@ -67,6 +68,7 @@ class Renderer
 	// TODO: Part 2c
 	//std::vector<VkBuffer> bufferVector;
 	//std::vector<VkDeviceMemory> memoryVector;
+	GW::AUDIO::GAudio audio;
 
 	VkShaderModule vertexShader = nullptr;
 	VkShaderModule pixelShader = nullptr;
@@ -90,21 +92,71 @@ class Renderer
 	GW::MATH::GVECTORF eye = { 5.75f, 5.25f, -30.5f, 0 };
 	GW::MATH::GVECTORF at = { 0.15f, 5.75f, 0 };
 	GW::MATH::GVECTORF up = { 0, 1, 0 };
-	GW::MATH::GVECTORF LightDir = { -1, -1, 2 };
-	GW::MATH::GVECTORF LightCol = { 1.0f, 0.73f, 0.75f, 1 };
+	GW::MATH::GVECTORF LightDir = { 10, -20, 10};
+	GW::MATH::GVECTORF LightCol = { 1.0f, 1.0f, 1.0f, 1 };
 	// TODO: Part 2b
 	//SHADER_MODEL_DATA smd;
 	GW::MATH::GMATRIXF cam;
 			float aspect = 0.0f;
+			unsigned int image = 0;
 
 	// TODO: Part 4g
 public:
+	void CreateBuffer()
+	{
+		for (size_t i = 0; i < models.size(); i++)
+		{
+			mProxy.ProjectionVulkanLHF(G_DEGREE_TO_RADIAN(65), aspect, 0.1f, 100.0f, models[i].smd.projection);
+			mProxy.IdentityF(models[i].smd.view);
+			mProxy.LookAtLHF(eye, at, up, models[i].smd.view);
+			models[i].smd.sunColor = LightCol;
+			models[i].smd.sunDirection = LightDir;
+			models[i].smd.sunColor = LightCol;
+
+		}
+
+
+		VkPhysicalDevice physicalDevice = nullptr;
+		vlk.GetDevice((void**)&device);
+		vlk.GetPhysicalDevice((void**)&physicalDevice);
+
+
+		for (size_t i = 0; i < models.size(); i++)
+		{
+			GvkHelper::create_buffer(physicalDevice, device, sizeof(H2B::VERTEX) * models[i].parse.vertices.size(),
+				VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+				VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &models[i].buffer, &models[i].deviceMemory);
+			GvkHelper::write_to_buffer(device, models[i].deviceMemory, models[i].parse.vertices.data(), sizeof(H2B::VERTEX) * models[i].parse.vertices.size());
+
+			GvkHelper::create_buffer(physicalDevice, device, sizeof(unsigned int) * models[i].parse.indices.size(),
+				VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+				VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &models[i].indicieBuffer, &models[i].indicieMemory);
+			GvkHelper::write_to_buffer(device, models[i].indicieMemory, models[i].parse.indices.data(), sizeof(unsigned int) * models[i].parse.indices.size());
+		}
+		// TODO: Part 1g
+		/*GvkHelper::create_buffer(physicalDevice, device, sizeof(FSLogo_indices),
+			VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+			VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &buffer2, &deviceMemory2);
+		GvkHelper::write_to_buffer(device, deviceMemory2, FSLogo_indices, sizeof(FSLogo_indices));*/
+		// TODO: Part 2d
+		for (size_t i = 0; i < models.size(); i++)
+		{
+			smdVec.push_back(models[i].smd);
+		}
+		for (int j = 0; j < image; j++)
+		{
+			GvkHelper::create_buffer(physicalDevice, device, sizeof(SHADER_MODEL_DATA) * smdVec.size(),
+				VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+				VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &bufferVector[j], &memoryVector[j]);
+			GvkHelper::write_to_buffer(device, memoryVector[j], smdVec.data(), sizeof(SHADER_MODEL_DATA) * smdVec.size());
+		}
+
+	}
 
 	Renderer(GW::SYSTEM::GWindow _win, GW::GRAPHICS::GVulkanSurface _vlk)
 	{
 		win = _win;
 		vlk = _vlk;
-		unsigned int image = 0;
 		vlk.GetSwapchainImageCount(image);
 
 		bufferVector.resize(image);
@@ -117,6 +169,11 @@ public:
 		mProxy.Create();
 		gInputProxy.Create(win);
 		gControllerProxy.Create();
+		audio.Create();
+		audio.SetMasterVolume(1.0f);
+		audio.PlayMusic();
+		gMusic.Create("../DEV4Git/Akatsuki.wav", audio);
+		gMusic.Play(true);
 		vlk.GetAspectRatio(aspect);
 		// TODO: Part 2b
 		for (size_t i = 0; i < models.size(); i++)
@@ -127,7 +184,9 @@ public:
 			models[i].smd.sunColor = LightCol;
 			models[i].smd.sunDirection = LightDir;
 			models[i].smd.sunColor = LightCol;
+			
 		}
+
 		/*models[0].smd.sunColor = LightCol;
 		models[0].smd.sunDirection = LightDir;*/
 		//mProxy.IdentityF(models[0].smd.matricies[1]);
@@ -474,8 +533,6 @@ public:
 		}
 		GvkHelper::write_to_buffer(device, memoryVector[0], smdVec.data(), sizeof(SHADER_MODEL_DATA) * smdVec.size());
 
-		//const int sizee = models.size();
-		vector<unsigned int> materialData;
 		for (int i = 0; i < models.size(); i++)
 		{
 			vkCmdBindVertexBuffers(commandBuffer, 0, 1, &models[i].buffer, offsets);
@@ -483,7 +540,7 @@ public:
 
 			for (int j = 0; j < models[i].parse.meshes.size(); j++)
 			{
-				unsigned int ID[2] = { i, models[i].parse.meshes[j].materialIndex };
+				unsigned int ID[2] = { i, j }; //models[i].parse.meshes[j].materialIndex
 				vkCmdPushConstants(commandBuffer, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
 					0, sizeof(unsigned int) * 2, ID);
 				vkCmdDrawIndexed(commandBuffer, models[i].parse.meshes[j].drawInfo.indexCount, 1,
@@ -491,16 +548,16 @@ public:
 			}
 		}
 
-		/*vkCmdBindVertexBuffers(commandBuffer, 0, 1, &models[0].buffer, offsets);
-		vkCmdBindIndexBuffer(commandBuffer, models[0].indicieBuffer, 0, VkIndexType::VK_INDEX_TYPE_UINT32);
-		GvkHelper::write_to_buffer(device, memoryVector[0], &models[0].smd, sizeof(SHADER_MODEL_DATA));
+		/*vkCmdBindVertexBuffers(commandBuffer, 0, 1, &models[6].buffer, offsets);
+		vkCmdBindIndexBuffer(commandBuffer, models[6].indicieBuffer, 0, VkIndexType::VK_INDEX_TYPE_UINT32);
+		GvkHelper::write_to_buffer(device, memoryVector[0], &models[6].smd, sizeof(SHADER_MODEL_DATA));
 
 		for (size_t i = 0; i < 1; i++)
 		{
 			vkCmdPushConstants(commandBuffer, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-				0, sizeof(unsigned int), &models[0].parse.meshes[i].materialIndex);
-			vkCmdDrawIndexed(commandBuffer, models[0].parse.meshes[i].drawInfo.indexCount, 1,
-				models[0].parse.meshes[i].drawInfo.indexOffset, 0, 0);
+				0, sizeof(unsigned int), &models[6].parse.meshes[i].materialIndex);
+			vkCmdDrawIndexed(commandBuffer, models[6].parse.meshes[i].drawInfo.indexCount, 1,
+				models[6].parse.meshes[i].drawInfo.indexOffset, 0, 0);
 		}*/
 		// TODO: Part 3d
 	//vkCmdDraw(commandBuffer, 3885, 1, 0, 0); // TODO: Part 1d, 1h
@@ -529,6 +586,10 @@ public:
 		float leftShiftState = 0.0f;
 		float rightTriggerState = 0.0f;
 		float leftTriggerState = 0.0f;
+
+		float arrowRight = 0.0f;
+		float arrowLeft = 0.0f;
+
 		float wKeyState = 0.0f;
 		float sKeyState = 0.0f;
 		float aKeyState = 0.0f;
@@ -541,13 +602,26 @@ public:
 		win.GetWidth(screenWidth);
 		float mouseDeltaX = 0.0f;
 		float mouseDeltaY = 0.0f;
-		gInputProxy.GetMouseDelta(mouseDeltaX, mouseDeltaY);
+		GW::GReturn result = gInputProxy.GetMouseDelta(mouseDeltaX, mouseDeltaY);
 		float rightStickYaxis = 0.0f;
 		gControllerProxy.GetState(0, G_RY_AXIS, rightStickYaxis);
 		float rightStickXaxis = 0.0f;
 		gControllerProxy.GetState(0, G_RX_AXIS, rightStickXaxis);
 
 		float perFrameSpeed = 0.0f;
+		
+		gInputProxy.GetState(G_KEY_RIGHT, arrowRight);
+		gInputProxy.GetState(G_KEY_LEFT, arrowLeft);
+
+		if (arrowRight != 0)
+		{
+			cam.row4 = { 0.0f, 50.0f, 0.0f, 1 };
+
+		}
+		if (arrowLeft != 0)
+		{
+			cam.row4 = { 5.75f, 5.25f, -30.5f, 1 };
+		}
 
 		if (G_PASS(gInputProxy.GetState(G_KEY_SPACE, spaceKeyState)) &&
 			spaceKeyState != 0 ||
@@ -597,17 +671,23 @@ public:
 		mProxy.MultiplyMatrixF(translation, cam, cam);
 		// TODO: Part 4f
 		float thumbSpeed = 3.14 * perFrameSpeed;
-		float totalPitch = G_DEGREE_TO_RADIAN(65) * mouseDeltaY / screenHeight + rightStickYaxis * -thumbSpeed;
-		GW::MATH::GMATRIXF pitchMatrix = GW::MATH::GIdentityMatrixF;
-		mProxy.RotationYawPitchRollF(0, totalPitch, 0, pitchMatrix);
-		mProxy.MultiplyMatrixF(pitchMatrix, cam, cam);
-		// TODO: Part 4g
-		float totalYaw = G_DEGREE_TO_RADIAN(65) * aspect * mouseDeltaX / screenWidth + rightStickXaxis * thumbSpeed;
-		GW::MATH::GMATRIXF yawMatrix = GW::MATH::GIdentityMatrixF;
-		mProxy.RotationYawPitchRollF(totalYaw, 0, 0, yawMatrix);
-		GW::MATH::GMATRIXF camSave = cam;
-		mProxy.MultiplyMatrixF(cam, yawMatrix, cam);
-		cam = camSave;
+		if (G_PASS(result) && result != GW::GReturn::REDUNDANT)
+		{
+			float totalPitch = G_DEGREE_TO_RADIAN(65) * mouseDeltaY / screenHeight + rightStickYaxis * -thumbSpeed;
+			//GW::MATH::GMATRIXF pitchMatrix = GW::MATH::GIdentityMatrixF;
+			mProxy.RotateXLocalF(cam, totalPitch, cam);
+			//mProxy.RotationYawPitchRollF(0, totalPitch, 0, pitchMatrix);
+			//mProxy.MultiplyMatrixF(pitchMatrix, cam, cam);
+			// TODO: Part 4g
+			float totalYaw = G_DEGREE_TO_RADIAN(65) * aspect * mouseDeltaX / screenWidth + rightStickXaxis * thumbSpeed;
+			GW::MATH::GMATRIXF yawMatrix = GW::MATH::GIdentityMatrixF;
+			//mProxy.RotationYawPitchRollF(totalYaw, 0, 0, yawMatrix);
+			GW::MATH::GVECTORF camSave = cam.row4;
+			cam.row4 = { 0,0,0,1 };
+			mProxy.RotateYGlobalF(cam, totalYaw, cam);
+			cam.row4 = camSave;
+		}
+	//	mProxy.MultiplyMatrixF(yawMatrix, cam, cam);
 		// TODO: Part 4c
 		mProxy.InverseF(cam, models[0].smd.view);
 		for (size_t i = 1; i < models.size(); i++)
@@ -627,11 +707,19 @@ private:
 		vkDestroyBuffer(device, buffer2, nullptr);
 		vkFreeMemory(device, deviceMemory2, nullptr);
 		// TODO: Part 2d
-		for (int i = 0; i < models.size(); i++)
+		for (int i = 0; i < bufferVector.size(); i++)
 		{
 			vkDestroyBuffer(device, bufferVector[i], nullptr);
 			vkFreeMemory(device, memoryVector[i], nullptr);
 		}
+		for (size_t i = 0; i < models.size(); i++)
+		{
+			vkDestroyBuffer(device, models[i].buffer, nullptr);
+			vkFreeMemory(device, models[i].deviceMemory, nullptr);
+			vkDestroyBuffer(device, models[i].indicieBuffer, nullptr);
+			vkFreeMemory(device, models[i].indicieMemory, nullptr);
+		}
+
 		vkDestroyBuffer(device, vertexHandle, nullptr);
 		vkFreeMemory(device, vertexData, nullptr);
 		vkDestroyShaderModule(device, vertexShader, nullptr);
